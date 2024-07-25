@@ -1,0 +1,21 @@
+version: '3.6'
+services:
+  rabbit:
+    image: rabbitmq:3-management
+    volumes:
+    - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    ports:
+    - '6370:15672'
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=your_password
+
+  redis:
+    image: redis:latest
+    volumes:
+      - ./redis.conf:/redis.conf:ro
+    ports:
+      - '6379:6379'
+    environment:
+      - REDIS_PASSWORD=your_password
+    command: [ "redis-server", "/redis.conf" ]
