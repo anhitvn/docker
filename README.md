@@ -1,4 +1,4 @@
-# Docker compose with redis-rabbitmq-manage
+# ``Docker compose with redis-rabbitmq-manage
 
 Đầu tiên, tôi sẽ để link được thao khảo tại đây [Link](https://gist.github.com/ps-jessejjohnson/cbe0df09431fb59ab3870dba5c583fa0)
 
@@ -102,3 +102,26 @@ Máy tôi đã setup redis-cli sẵn, nếu bạn chưa setup hãy setup redis-c
 ```
 redis-cli -h [your ip] -p 16379 -a 'your_password' ping
 ```
+
+Ngoài ra còn một số lưu ý khác khi cần config cải thiện đối với rabbitmq.
+Khi map volume cho data của rabbitmq (`/var/lib/rabbitmq/`), sẽ có một số lỗi không mong muốn như lỗi tôi từng gặp
+
+```
+2024-07-25 16:42:53.066324+00:00 [error] <0.154.0>     reductions: 248
+2024-07-25 16:42:53.066324+00:00 [error] <0.154.0>   neighbours:
+2024-07-25 16:42:53.066324+00:00 [error] <0.154.0> 
+2024-07-25 16:42:53.070181+00:00 [notice] <0.44.0> Application rabbitmq_prelaunch exited with reason: {{shutdown,{failed_to_start_child,prelaunch,{badmatch,{error,{{shutdown,{failed_to_start_child,auth,{"Cookie file /var/lib/rabbitmq/.erlang.cookie must be accessible by owner only",[{auth,init_no_setcookie,0,[{file,"auth.erl"},{line,313}]},{auth,init,1,[{file,"auth.erl"},{line,165}]},{gen_server,init_it,2,[{file,"gen_server.erl"},{line,980}]},{gen_server,init_it,6,[{file,"gen_server.erl"},{line,935}]},{proc_lib,init_p_do_apply,3,[{file,"proc_lib.erl"},{line,241}]}]}}},{child,undefined,net_sup_dynamic,{erl_distribution,start_link,[#{name => rabbit_prelaunch_20@localhost,supervisor => net_sup_dynamic,net_tickintensity => 4,net_ticktime => 60,name_domain => shortnames,clean_halt => false}]},permanent,false,1000,supervisor,[erl_distribution]}}}}}},{rabbit_prelaunch_app,start,[normal,[]]}}
+Runtime terminating during boot (terminating)
+
+Crash dump is being written to: erl_crash.dump...[os_mon] memory supervisor port (memsup): Erlang has closed
+[os_mon] cpu supervisor port (cpu_sup): Erlang has closed
+```
+
+Đây là lỗi khi RabbitMQ khởi động và nó liên quan đến việc khởi tạo module 'auth'.
+
+Để xử lý lỗi này tôi cần phải set lại permision cho file cookie của RabbitMQ `/var/lib/rabbitmq/.erlang.cookie`
+
+Set xong thì chỉ cần restart lại docker-compose là được.
+
+
+Chúc bạn thành công.
