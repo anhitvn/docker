@@ -1,4 +1,4 @@
-# ``Docker compose with redis-rabbitmq-manage
+# Docker compose with redis-rabbitmq-manage
 
 Đầu tiên, tôi sẽ để link được thao khảo tại đây [Link](https://gist.github.com/ps-jessejjohnson/cbe0df09431fb59ab3870dba5c583fa0)
 
@@ -6,6 +6,14 @@ Dù các bạn không biết nhưng rất cảm ơn repo/comment của các bạ
 
 - @ps-jessejjohnson
 - @ps-przemekaugustyn
+
+Dùng trong tài liệu:
+
+- RabbitMQ 3.13.6
+- Redis: latest
+- docker compose version 3.6
+
+![img](./.img/rabbitmq.png)
 
 Với docker-compose.yml hiện tại đã có thể để cho rabbitmq và redis hoạt động.
 
@@ -122,6 +130,5 @@ Crash dump is being written to: erl_crash.dump...[os_mon] memory supervisor port
 Để xử lý lỗi này tôi cần phải set lại permision cho file cookie của RabbitMQ `/var/lib/rabbitmq/.erlang.cookie`
 
 Set xong thì chỉ cần restart lại docker-compose là được.
-
 
 Chúc bạn thành công.
