@@ -1,0 +1,15 @@
+#version: '3.8'
+services:
+  rabbit-stag:
+    image: rabbitmq:3-management
+    volumes:
+    - ./rabbitmq-mqtt.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    ports:
+    - '5673:5672'
+    - '1884:1883'
+    - '16381:15672'
+    command: "/bin/bash -c \"rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_web_mqtt rabbitmq_amqp1_0; rabbitmq--server\""
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=your_password
+    restart: always
